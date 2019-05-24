@@ -1,0 +1,46 @@
+.pokemon-list-item {
+  display: flex;
+  flex-direction: column;
+
+  margin: 5px;
+  padding: 10px;
+  border: 1px black solid;
+  border-radius: 10px;
+
+  &__container{
+    display: flex;
+  }
+
+  &__info {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+
+    &-item {
+      display: flex;
+      justify-content: space-between;
+      border-bottom: 1px #cccccc solid;
+    }
+  }
+
+  &__stats {
+
+    &-table{
+
+    }
+
+    &-item {
+      display: flex;
+      justify-content: space-between;
+
+      &__line {
+        width: 400px;
+        border: 1px black solid;
+
+        &-filler{
+          height: 100%;
+        }
+      }
+    }
+  }
+}
