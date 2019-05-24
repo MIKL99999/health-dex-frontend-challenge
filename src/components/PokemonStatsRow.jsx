@@ -32,7 +32,7 @@ const PokemonStatsRow = ({base_stat, stat}) => {
     return (
         <div key={stat.name} className="pokemon-stats-row">
             <span>{capitalizeFirstLetter(stat.name)}</span>
-            <span>{base_stat}</span>
+            <span className="pokemon-stats-row__base-stat">{base_stat}</span>
 
             <div className="pokemon-stats-row__line">
                 <div

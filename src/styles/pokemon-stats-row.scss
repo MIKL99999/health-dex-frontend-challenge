@@ -1,11 +1,17 @@
 .pokemon-stats-row {
   display: grid;
   grid-template-columns: 1fr 0.5fr 3fr;
+  border-bottom: 1px #cccccc solid;
+  padding: 5px;
+
+  &__base-stat{
+    font-weight: bold;
+  }
 
   &__line {
     width: 100%;
     border-radius: 5px;
-    border: 1px black solid;
+
 
     &-filler {
       height: 100%;

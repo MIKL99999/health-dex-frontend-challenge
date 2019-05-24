@@ -1,7 +1,8 @@
-import React, {Component} from 'react';
-import pokeapi from "../fetch/pokeapi";
+import React, {PureComponent} from 'react';
+import pokeapi from '../fetch/pokeapi';
 
-export default class PokemonTypes extends Component {
+
+export default class PokemonTypes extends PureComponent {
     state = {
         typesList: null,
     };
@@ -12,6 +13,17 @@ export default class PokemonTypes extends Component {
         this.setState({typesList: res.results});
     }
 
+    /**
+     * @param {Event} event
+     */
+    handleTypeChange = async (event) => {
+        const typeData = await pokeapi.getTypeByName(event.target.value);
+        console.log(typeData);
+
+        // TODO Add filtration
+        //typeData.pokemon
+    };
+
     render() {
         const {typesList} = this.state;
 
@@ -20,7 +32,7 @@ export default class PokemonTypes extends Component {
         }
 
         return (
-            <select>
+            <select onChange={this.handleTypeChange}>
                 <option>Choose pokemon type</option>
                 {typesList.map(({name}) => <option key={name}>{name}</option>)}
             </select>

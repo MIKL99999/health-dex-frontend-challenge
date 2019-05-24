@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import PokemonInfo from './PokemonInfo';
 import PokemonStatsRow from './PokemonStatsRow';
 import '../styles/pokemon-stats.scss';
 
@@ -8,7 +7,7 @@ import '../styles/pokemon-stats.scss';
 const PokemonStats = ({stats}) => {
     return (
         <div className="pokemon-stats">
-            <span>Base stats</span>
+            <span className="pokemon-stats__text">Base stats</span>
 
             <div>
                 {stats.reverse().map(({stat, base_stat}) => (
@@ -23,7 +22,7 @@ const PokemonStats = ({stats}) => {
     );
 };
 
-PokemonInfo.propTypes = {
+PokemonStats.propTypes = {
     stats: PropTypes.array.isRequired,
 };
 
