@@ -1,32 +1,69 @@
-import React, {PureComponent} from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import {withRouter} from 'react-router';
-import pokeapi from '../fetch/pokeapi';
+import {Link} from 'react-router-dom';
+import PokemonTypesGroup from './PokemonTypesGroup';
+import capitalizeFirstLetter from '../utils/capitalizeFirstLetter';
+import convertKgToLbs from '../utils/convertKgToLbs';
+import '../styles/pokemon-info.scss';
 
 
-class PokemonInfo extends PureComponent {
-    static propTypes = {
-        match: PropTypes.object.isRequired,
-        location: PropTypes.object.isRequired,
-        history: PropTypes.object.isRequired
-    };
+const PokemonInfo = ({pokemon}) => {
+    const {
+        id,
+        types,
+        height,
+        weight,
+        abilities,
+    } = pokemon.info;
 
-    async componentDidMount() {
-        // TODO id
-        const res = await pokeapi.getEvolutionChainsList(this.props.match.params.pokemon);
+    const weightInKg = weight / 10;
 
-        console.log(res);
-    }
+    return (
+        <div className="pokemon-info">
+            <Link to={`/pokemon/${pokemon.name}`}>
+                {capitalizeFirstLetter(pokemon.name)}
+            </Link>
 
-    render() {
-        // const {match, location, history} = this.props;
-
-        return (
-            <div>
-                PokemonInfo
+            <div className="pokemon-info__item">
+                <span>National №</span>
+                <span>{id}</span>
             </div>
-        );
-    }
-}
 
-export default withRouter(PokemonInfo);
+            <div className="pokemon-info__item">
+                <span>Types</span>
+                <PokemonTypesGroup types={types}/>
+            </div>
+
+            <div className="pokemon-info__item">
+                <span>Height</span>
+                <span>{height / 10} m</span>
+            </div>
+
+            <div className="pokemon-info__item">
+                <span>Weight</span>
+                <span>{convertKgToLbs(weightInKg)} lbs ({weightInKg} kg)</span>
+            </div>
+
+
+            <div className="pokemon-info__item">
+                <span>Abilities</span>
+
+                <div>
+                    {abilities.map(({ability, is_hidden}) =>
+                        <div key={ability.name}>
+                            <span>{ability.name}</span>
+                            {is_hidden ? <span>(hidden)</span> : null}
+                        </div>)}
+                </div>
+            </div>
+
+        </div>
+    );
+};
+
+PokemonInfo.propTypes = {
+    pokemon: PropTypes.object.isRequired,
+};
+
+
+export default PokemonInfo;

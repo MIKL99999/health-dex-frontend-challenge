@@ -14,7 +14,7 @@ export default class PokemonList extends PureComponent {
         count: 0,
         offset: 0,
         pageCount: 0,
-        itemsOnPage: 30,
+        itemsOnPage: 9,
         pokemons: OrderedMap(),
     };
 
@@ -35,7 +35,7 @@ export default class PokemonList extends PureComponent {
             });
         });
 
-        this.getPokemonsInfo(fetchedPokemons, offset, 1000);
+        this.getPokemonsInfo(fetchedPokemons, offset, itemsOnPage);
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
@@ -58,6 +58,8 @@ export default class PokemonList extends PureComponent {
 
         const pokemonsWithInfo = pokemons.withMutations((pokemonsMut) => {
             pokemonsInfoList.forEach((pokemonsInfo) => {
+                pokemonsInfo.abilities.sort((a, b) => a.slot - b.slot);
+
                 pokemonsMut.setIn([pokemonsInfo.name, 'info'], pokemonsInfo);
             })
         });
@@ -85,7 +87,7 @@ export default class PokemonList extends PureComponent {
 
         return (
             <div>
-                <ul className="pokemon-list" >
+                <ul className="pokemon-list">
                     {
                         pokemons.slice(offset, offset + itemsOnPage).valueSeq().map((pokemon) =>
                             <PokemonListItem

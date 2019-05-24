@@ -9,38 +9,13 @@
 
   &__container{
     display: flex;
+    align-items: center;
   }
 
-  &__info {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-
-    &-item {
-      display: flex;
-      justify-content: space-between;
-      border-bottom: 1px #cccccc solid;
-    }
+  &__img{
+    flex-grow: 0;
+    flex-shrink: 0;
   }
 
-  &__stats {
 
-    &-table{
-
-    }
-
-    &-item {
-      display: flex;
-      justify-content: space-between;
-
-      &__line {
-        width: 400px;
-        border: 1px black solid;
-
-        &-filler{
-          height: 100%;
-        }
-      }
-    }
-  }
 }

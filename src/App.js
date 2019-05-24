@@ -3,7 +3,7 @@ import {Provider} from 'react-redux';
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom'
 import {store} from './redux/config';
 import Main from './components/Main';
-import PokemonInfo from './components/PokemonInfo';
+import PokemonPage from './components/PokemonPage';
 import './App.css';
 
 
@@ -14,7 +14,7 @@ function App() {
             <Router>
                 <Switch>
                     <Route exact path="/" component={Main}/>
-                    <Route path="/pokemon/:pokemon" component={PokemonInfo}/>
+                    <Route path="/pokemon/:pokemon" component={PokemonPage}/>
                 </Switch>
             </Router>
         </Provider>
