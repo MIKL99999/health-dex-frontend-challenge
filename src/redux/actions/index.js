@@ -1,22 +1,13 @@
-let nextTodoId = 0;
-export const addTodo = (text) => ({
-  type: "ADD_TODO",
-  id: nextTodoId++,
-  text
+export const SET_POKEMONS = 'SET_POKEMONS';
+export const setPokemons = (pokemons) => ({
+  type: SET_POKEMONS,
+  pokemons
 });
 
-export const setVisibilityFilter = (filter) => ({
-  type: "SET_VISIBILITY_FILTER",
-  filter
-});
 
-export const toggleTodo = (id) => ({
-  type: "TOGGLE_TODO",
-  id
-});
 
-export const VisibilityFilters = {
-  SHOW_ALL: "SHOW_ALL",
-  SHOW_COMPLETED: "SHOW_COMPLETED",
-  SHOW_ACTIVE: "SHOW_ACTIVE"
-};
+export const SET_POKEMONS_FILTER = 'SET_POKEMONS_FILTER';
+export const setPokemonsFilter = (pokemonsFilter) => ({
+  type: SET_POKEMONS_FILTER,
+  pokemonsFilter
+});

@@ -41,7 +41,7 @@ const PokemonInfo = ({pokemon}) => {
 
             <div className="pokemon-info__item">
                 <span>Weight</span>
-                <span>{convertKgToLbs(weightInKg)} lbs ({weightInKg} kg)</span>
+                <span>{convertKgToLbs(weightInKg).toFixed(1)} lbs ({weightInKg} kg)</span>
             </div>
 
 

@@ -1,9 +1,10 @@
-import { combineReducers } from "redux";
+import { combineReducers } from 'redux';
 import {routerReducer} from 'react-router-redux'
-import todos from "./todos";
-
+import pokemons from './pokemons';
+import pokemonsFilter from './pokemonsFilter';
 
 export default combineReducers({
-  todos,
+  pokemons,
+  pokemonsFilter,
   routing: routerReducer
 });
