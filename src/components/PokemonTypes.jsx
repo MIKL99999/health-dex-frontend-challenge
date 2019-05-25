@@ -7,7 +7,7 @@ import {setPokemonsFilter} from '../redux/actions';
 
 class PokemonTypes extends Component {
     state = {
-        typesList: null,
+        typesList: [],
     };
 
     static defaultFilterValue = 'Choose pokemon type';
@@ -43,16 +43,10 @@ class PokemonTypes extends Component {
     };
 
     render() {
-        const {typesList} = this.state;
-
-        if (!typesList) {
-            return (<div>Loading...</div>);
-        }
-
         return (
             <select onChange={this.handleTypeChange}>
                 <option>{PokemonTypes.defaultFilterValue}</option>
-                {typesList.map(({name}) => <option key={name}>{name}</option>)}
+                {this.state.typesList.map(({name}) => <option key={name}>{name}</option>)}
             </select>
         );
     }

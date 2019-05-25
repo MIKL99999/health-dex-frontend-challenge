@@ -4,9 +4,6 @@ import {BrowserRouter as Router, Route, Switch} from 'react-router-dom'
 import {store} from './redux/config';
 import Main from './components/Main';
 import PokemonPage from './components/PokemonPage';
-import './App.css';
-
-
 
 function App() {
     return (

@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {OrderedMap} from 'immutable';
 import ReactPaginate from 'react-paginate';
+import {MoonLoader} from 'react-spinners';
 import PokemonListItem from './PokemonListItem';
 import pokeapi from '../fetch/pokeapi';
 import {setPokemons} from '../redux/actions';
@@ -121,8 +122,10 @@ class PokemonList extends Component {
         } = this.state;
 
         if (!pokemonsOnPage.size) {
-            // TODO Loader comp
-            return (<div>Loading...</div>);
+            return (
+                <div className="center">
+                    <MoonLoader/>
+                </div>);
         }
 
         return (
