@@ -3,9 +3,10 @@ import {connect} from 'react-redux';
 import pokeapi from '../fetch/pokeapi';
 import getPokemonsByUrls from '../redux/actions/getPokemonsByUrls';
 import {setPokemonsFilter} from '../redux/actions';
+import '../styles/pokemon-type-filter.scss';
 
 
-class PokemonTypes extends Component {
+class PokemonTypeFilter extends Component {
     state = {
         typesList: [],
     };
@@ -25,7 +26,7 @@ class PokemonTypes extends Component {
 
         const {getPokemonsByUrls, setPokemonsFilter} = this.props;
 
-        if (type === PokemonTypes.defaultFilterValue) {
+        if (type === PokemonTypeFilter.defaultFilterValue) {
             setPokemonsFilter({currentType: null, filteredPokemonNames: []});
         } else {
             const typeData = await pokeapi.getTypeByName(type);
@@ -44,12 +45,15 @@ class PokemonTypes extends Component {
 
     render() {
         return (
-            <select onChange={this.handleTypeChange}>
-                <option>{PokemonTypes.defaultFilterValue}</option>
+            <select
+                className="pokemon-type-filter"
+                onChange={this.handleTypeChange}
+            >
+                <option>{PokemonTypeFilter.defaultFilterValue}</option>
                 {this.state.typesList.map(({name}) => <option key={name}>{name}</option>)}
             </select>
         );
     }
 }
 
-export default connect(null, {getPokemonsByUrls, setPokemonsFilter})(PokemonTypes);
+export default connect(null, {getPokemonsByUrls, setPokemonsFilter})(PokemonTypeFilter);

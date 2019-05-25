@@ -1,13 +1,12 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {OrderedMap} from 'immutable';
-import ReactPaginate from 'react-paginate';
 import {MoonLoader} from 'react-spinners';
 import PokemonListItem from './PokemonListItem';
 import pokeapi from '../fetch/pokeapi';
 import {setPokemons} from '../redux/actions';
+import {Pagination} from './Pagination';
 import getPokemonsByUrls from '../redux/actions/getPokemonsByUrls';
-import '../styles/react-paginate-style.scss';
 import '../styles/pokemon-list.scss';
 
 
@@ -139,18 +138,9 @@ class PokemonList extends Component {
                             />)
                     }
                 </ul>
-                <ReactPaginate
-                    previousLabel={'Previous'}
-                    nextLabel={'Next'}
-                    breakLabel={'...'}
-                    breakClassName={'break-me'}
+                <Pagination
                     pageCount={pageCount}
-                    marginPagesDisplayed={2}
-                    pageRangeDisplayed={5}
                     onPageChange={this.handlePageClick}
-                    containerClassName={'pagination'}
-                    subContainerClassName={'pages pagination'}
-                    activeClassName={'active'}
                 />
             </div>
         );

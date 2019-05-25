@@ -1,0 +1,11 @@
+.pagination {
+  display: flex;
+  justify-content: space-around;
+  font-size: 20px;
+
+  &__active {
+    color: blue;
+    font-weight: bold;
+  }
+
+}
