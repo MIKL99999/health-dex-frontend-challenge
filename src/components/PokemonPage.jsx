@@ -24,49 +24,19 @@ class PokemonPage extends PureComponent {
         const pokemonName = match.params.pokemon;
         const pokemon = pokemons.get(pokemonName);
         const movesList = pokemon.info.moves;
+
         this.setState({movesList});
 
+        const pokemonSpecies = await pokeapi.getPokemonSpeciesByName(pokemonName);
+        const chainUrl = pokemonSpecies.evolution_chain.url;
+        const evolutionChain = await pokeapi.resource(chainUrl);
 
-        const evolutionChains = await this.getEvolutionChains();
-        const evolutionChain = this.findEvolutionChainByPokemonName(evolutionChains, pokemonName);
         console.log(evolutionChain);
+
+        // TODO Add info to each pokemon is chan
 
         this.setState({evolutionChain});
     }
-
-
-    findEvolutionChainByPokemonName = (evolutionChains, pokemonName) => {
-        return evolutionChains.find((evolutionChain) => {
-            const chain = evolutionChain.chain;
-
-            return this.searchPokemonNameInChain(chain, pokemonName);
-        });
-    };
-
-    searchPokemonNameInChain = (chain, pokemonName) => {
-        if (chain.species.name === pokemonName) {
-            return true;
-        }
-
-        return chain.evolves_to.find((c) => this.searchPokemonNameInChain(c, pokemonName));
-    };
-
-    /**
-     * @returns {Array}
-     */
-    getEvolutionChains = async () => {
-        const evolutionChainsUrls = await pokeapi.getEvolutionChainsList();
-
-        const promises = evolutionChainsUrls.results.map(({url}) => {
-            const str = '/evolution-chain/';
-            const index = url.indexOf(str);
-            const id = url.slice(index + str.length, -1);
-
-            return pokeapi.getEvolutionChainById(id);
-        });
-
-        return Promise.all(promises);
-    };
 
     render() {
 
