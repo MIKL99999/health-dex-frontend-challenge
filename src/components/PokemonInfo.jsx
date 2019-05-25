@@ -20,7 +20,7 @@ const PokemonInfo = ({pokemon}) => {
 
     return (
         <div className="pokemon-info">
-            <Link to={`/pokemon/${pokemon.name}`}>
+            <Link to={`/pokemon/${pokemon.name}`} className="pokemon-info__name">
                 {capitalizeFirstLetter(pokemon.name)}
             </Link>
 
@@ -52,7 +52,7 @@ const PokemonInfo = ({pokemon}) => {
                     {abilities.map(({ability, is_hidden}) =>
                         <div key={ability.name}>
                             <span>{ability.name}</span>
-                            {is_hidden ? <span>(hidden)</span> : null}
+                            {is_hidden ? <span> (hidden)</span> : null}
                         </div>)}
                 </div>
             </div>
