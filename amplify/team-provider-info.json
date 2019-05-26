@@ -1,0 +1,14 @@
+{
+    "dev": {
+        "awscloudformation": {
+            "AuthRoleName": "healthdexfrontendcha-dev-20190526180254-authRole",
+            "UnauthRoleArn": "arn:aws:iam::589642886067:role/healthdexfrontendcha-dev-20190526180254-unauthRole",
+            "AuthRoleArn": "arn:aws:iam::589642886067:role/healthdexfrontendcha-dev-20190526180254-authRole",
+            "Region": "eu-west-1",
+            "DeploymentBucketName": "healthdexfrontendcha-dev-20190526180254-deployment",
+            "UnauthRoleName": "healthdexfrontendcha-dev-20190526180254-unauthRole",
+            "StackName": "healthdexfrontendcha-dev-20190526180254",
+            "StackId": "arn:aws:cloudformation:eu-west-1:589642886067:stack/healthdexfrontendcha-dev-20190526180254/56f58060-7fc7-11e9-8163-020193028d12"
+        }
+    }
+}
