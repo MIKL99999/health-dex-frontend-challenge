@@ -37,14 +37,10 @@ class PokemonPage extends PureComponent {
 
     async setPokemonEvolutionChain(pokemonName) {
         const pokemonSpecies = await pokeapi.getPokemonSpeciesByName(pokemonName);
-        const chainUrl = pokemonSpecies.evolution_chain.url;
-        const evolutionChain = await pokeapi.resource(chainUrl);
 
-        const chain = await this.addPokemonsInfoInEvolutionChain(evolutionChain.chain);
+        const evolutionChain = await pokeapi.resource(pokemonSpecies.evolution_chain.url);
 
-        evolutionChain.chain = chain;
-
-        console.log('chain with info = ', chain);
+        evolutionChain.chain = await this.addPokemonsInfoInEvolutionChain(evolutionChain.chain);
 
         this.setState({evolutionChain});
     }

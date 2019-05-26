@@ -1,11 +1,16 @@
 import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
 import * as d3 from 'd3';
+import uuid from 'uuid/v1';
+import {getTypeColor} from '../utils/getTypeColor';
 import capitalizeFirstLetter from '../utils/capitalizeFirstLetter';
 import '../styles/pokemons-evolution-tree.scss';
 
 
 class PokemonsEvolutionTree extends PureComponent {
+
+    id = 'pokemonsEvolutionTree' + uuid();
+
     componentDidMount() {
         const treeData = this.props.evolutionChain.chain;
 
@@ -17,24 +22,21 @@ class PokemonsEvolutionTree extends PureComponent {
         // append the svg object to the body of the page
         // appends a 'group' element to 'svg'
         // moves the 'group' element to the top left margin
-        var svg = d3.select("#pokemonsEvolutionTree")
+        const svg = d3.select('#' + this.id)
             .append("svg")
             .attr("width", width + margin.right + margin.left)
             .attr("height", height + margin.top + margin.bottom)
             .append("g")
             .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-        var i = 0,
-            duration = 750,
-            root;
+        let i = 0;
+        const duration = 750;
 
         // declares a tree layout and assigns the size
-        var treemap = d3.tree().size([height, width]);
+        const treeMap = d3.tree().size([height, width]);
 
         // Assigns parent, children, height, depth
-        root = d3.hierarchy(treeData, function (d) {
-            return d.evolves_to;
-        });
+        const root = d3.hierarchy(treeData, (d) => d.evolves_to);
         root.x0 = height / 2;
         root.y0 = 0;
 
@@ -43,123 +45,120 @@ class PokemonsEvolutionTree extends PureComponent {
         function update(source) {
 
             // Assigns the x and y position for the nodes
-            const treeData = treemap(root);
+            const treeData = treeMap(root);
 
             // Compute the new tree layout.
-            var nodes = treeData.descendants(),
-                links = treeData.descendants().slice(1);
+            const nodes = treeData.descendants();
+            const links = treeData.descendants().slice(1);
 
             // Normalize for fixed-depth.
-            nodes.forEach(function (d) {
-                d.y = d.depth * 180
-            });
+            nodes.forEach((d) => d.y = d.depth * 180);
 
             // ****************** Nodes section ***************************
 
             // Update the nodes...
-            var node = svg.selectAll('g.node')
-                .data(nodes, function (d) {
-                    return d.id || (d.id = ++i);
-                });
+            const node = svg.selectAll('g.node')
+                .data(nodes, (d) => d.id || (d.id = ++i));
 
             // Enter any new modes at the parent's previous position.
-            var nodeEnter = node.enter().append('g')
+            const nodeEnter = node.enter().append('g')
                 .attr('class', 'node')
-                .attr("transform", function (d) {
-                    return "translate(" + source.y0 + "," + source.x0 + ")";
-                })
+                .attr("transform", () => "translate(" + source.y0 + "," + source.x0 + ")")
                 .on('click', click);
 
-
+            // Add pokemon icon
             nodeEnter.append("svg:image")
                 .attr('x', -40)
                 .attr('y', -50)
                 .attr('width', 96)
                 .attr('height', 96)
-                .attr("xlink:href", (d) => d.data.info.sprites.front_default);
+                .attr("xlink:href", d => d.data.info.sprites.front_default);
 
-
-            // Add labels for the nodes
+            // Add pokemon ids
             nodeEnter.append('text')
                 .attr("dy", ".35em")
-                .attr("x", -25)
                 .attr("y", 50)
-                // .attr("x", function(d) {
-                //     return d.children || d._children ? -13 : 13;
-                // })
-                // .attr("text-anchor", function(d) {
-                //     return d.children || d._children ? "end" : "start";
-                // })
-                .text(function (d) {
-                    return capitalizeFirstLetter(d.data.species.name);
+                .style('fill', 'gray')
+                .text(d => '#' + d.data.info.id);
+
+            // Add pokemon names
+            nodeEnter.append('text')
+                .attr("dy", ".35em")
+                .attr("x", -20)
+                .attr("y", 75)
+                .attr("font-weight", 'bold')
+                .style('fill', 'blue')
+                .text(d => capitalizeFirstLetter(d.data.species.name));
+
+
+            // TODO FIX !
+            if (nodeEnter.size()) {
+                // Add pokemon types
+                nodeEnter.datum().data.info.types.forEach((type, index) => {
+                    const typeName = type.type.name;
+
+                    nodeEnter
+                        .append('text')
+                        .attr("dy", ".35em")
+                        .attr("x", -20)
+                        .attr("y", 100 + (25 * index))
+                        .style('fill', () => getTypeColor(typeName))
+                        .text(() => capitalizeFirstLetter(typeName));
                 });
+            }
+
+            // Add pokemon names
+            nodeEnter.append('text')
+                .attr("dy", ".35em")
+                .attr("x", -125)
+                .attr("y", -10)
+                .attr("font-weight", 'bold')
+                .style('fill', 'blue')
+                .text(d => d.data.evolution_details.map((ed) => ed.trigger.name).join());
+
 
             // UPDATE
-            var nodeUpdate = nodeEnter.merge(node);
+            const nodeUpdate = nodeEnter.merge(node);
 
             // Transition to the proper position for the node
             nodeUpdate.transition()
                 .duration(duration)
-                .attr("transform", function (d) {
-                    return "translate(" + d.y + "," + d.x + ")";
-                });
-
-            // Update the node attributes and style
-            nodeUpdate.select('circle.node')
-                .attr('r', 10)
-                .style("fill", function (d) {
-                    return d._children ? "lightsteelblue" : "#fff";
-                })
-                .attr('cursor', 'pointer');
-
+                .attr("transform", (d) => "translate(" + d.y + "," + d.x + ")");
 
             // Remove any exiting nodes
-            var nodeExit = node.exit().transition()
+            node.exit().transition()
                 .duration(duration)
-                .attr("transform", function (d) {
-                    return "translate(" + source.y + "," + source.x + ")";
-                })
+                .attr("transform", () => "translate(" + source.y + "," + source.x + ")")
                 .remove();
 
-            // On exit reduce the node circles size to 0
-            nodeExit.select('circle')
-                .attr('r', 1e-6);
-
-            // On exit reduce the opacity of text labels
-            nodeExit.select('text')
-                .style('fill-opacity', 1e-6);
 
             // ****************** links section ***************************
 
             // Update the links...
-            var link = svg.selectAll('path.link')
-                .data(links, function (d) {
-                    return d.id;
-                });
+            const link = svg.selectAll('path.link')
+                .data(links, d => d.id);
 
             // Enter any new links at the parent's previous position.
-            var linkEnter = link.enter().insert('path', "g")
+            const linkEnter = link.enter().insert('path', "g")
                 .attr("class", "link")
-                .attr('d', function (d) {
-                    var o = {x: source.x0, y: source.y0}
+                .attr('d', function () {
+                    const o = {x: source.x0, y: source.y0};
                     return diagonal(o, o)
                 });
 
             // UPDATE
-            var linkUpdate = linkEnter.merge(link);
+            const linkUpdate = linkEnter.merge(link);
 
             // Transition back to the parent element position
             linkUpdate.transition()
                 .duration(duration)
-                .attr('d', function (d) {
-                    return diagonal(d, d.parent)
-                });
+                .attr('d', (d) => diagonal(d, d.parent));
 
             // Remove any exiting links
-            var linkExit = link.exit().transition()
+            link.exit().transition()
                 .duration(duration)
-                .attr('d', function (d) {
-                    var o = {x: source.x, y: source.y}
+                .attr('d', function () {
+                    const o = {x: source.x, y: source.y};
                     return diagonal(o, o)
                 })
                 .remove();
@@ -172,13 +171,10 @@ class PokemonsEvolutionTree extends PureComponent {
 
             // Creates a curved (diagonal) path from parent to the child nodes
             function diagonal(s, d) {
-
-                const path = `M ${s.y} ${s.x}
-            C ${(s.y + d.y) / 2} ${s.x},
-              ${(s.y + d.y) / 2} ${d.x},
-              ${d.y} ${d.x}`;
-
-                return path
+                return `M ${s.y} ${s.x}
+                        C ${(s.y + d.y) / 2} ${s.x},
+                          ${(s.y + d.y) / 2} ${d.x},
+                          ${d.y} ${d.x}`;
             }
 
             // Toggle children on click.
@@ -197,7 +193,7 @@ class PokemonsEvolutionTree extends PureComponent {
 
     render() {
         return (
-            <div id="pokemonsEvolutionTree"/>
+            <div id={this.id}/>
         );
     }
 }
