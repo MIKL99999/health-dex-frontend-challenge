@@ -1,4 +1,7 @@
 const Pokeapi = require('pokeapi-js-wrapper');
-const pokeapi = new Pokeapi.Pokedex();
+const options = {
+    protocol: 'https',
+};
+const pokeapi = new Pokeapi.Pokedex(options);
 
 export default pokeapi;

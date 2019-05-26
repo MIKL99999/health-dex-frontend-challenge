@@ -10,8 +10,8 @@ function App() {
         <Provider store={store}>
             <Router>
                 <Switch>
-                    <Route exact path="/" component={Main}/>
                     <Route path="/pokemon/:pokemon" component={PokemonPage}/>
+                    <Route path="/" component={Main}/>
                 </Switch>
             </Router>
         </Provider>
