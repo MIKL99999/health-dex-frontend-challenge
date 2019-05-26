@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import pokeapi from '../fetch/pokeapi';
-import getPokemonsByUrls from '../redux/actions/getPokemonsByUrls';
-import {setPokemonsFilter} from '../redux/actions';
+import getPokemonsByNames from '../redux/actions/getPokemonsByNames';
+import {setPokemonsFilter} from '../redux/actions/pokemonsFilterActions';
+import {setUI} from '../redux/actions/uiActions';
 import '../styles/pokemon-type-filter.scss';
 
 
@@ -24,23 +25,26 @@ class PokemonTypeFilter extends Component {
     handleTypeChange = async (event) => {
         const type = event.target.value;
 
-        const {getPokemonsByUrls, setPokemonsFilter} = this.props;
+        const {getPokemonsByNames, setPokemonsFilter, setUI} = this.props;
+
+        setUI({isLoading: true});
 
         if (type === PokemonTypeFilter.defaultFilterValue) {
             setPokemonsFilter({currentType: null, filteredPokemonNames: []});
         } else {
             const typeData = await pokeapi.getTypeByName(type);
 
-            const {pokemonUrls, pokemonNames} = typeData.pokemon.reduce((acc, pokemon) => {
-                acc.pokemonUrls.push(pokemon.pokemon.url);
-                acc.pokemonNames.push(pokemon.pokemon.name);
+            const pokemonNames = typeData.pokemon.reduce((acc, pokemon) => {
+                acc.push(pokemon.pokemon.name);
                 return acc;
-            }, {pokemonUrls: [], pokemonNames: []});
+            }, []);
 
-            await getPokemonsByUrls(pokemonUrls);
+            await getPokemonsByNames(pokemonNames);
             setPokemonsFilter({currentType: type, filteredPokemonNames: pokemonNames});
 
         }
+
+        setUI({isLoading: false});
     };
 
     render() {
@@ -56,4 +60,4 @@ class PokemonTypeFilter extends Component {
     }
 }
 
-export default connect(null, {getPokemonsByUrls, setPokemonsFilter})(PokemonTypeFilter);
+export default connect(null, {getPokemonsByNames, setPokemonsFilter, setUI})(PokemonTypeFilter);

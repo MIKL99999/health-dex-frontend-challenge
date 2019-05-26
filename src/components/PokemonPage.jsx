@@ -3,7 +3,9 @@ import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {withRouter} from 'react-router';
 import pokeapi from '../fetch/pokeapi';
-import capitalizeFirstLetter from '../utils/capitalizeFirstLetter';
+import MovesList from './MovesList';
+import PokemonsEvolutionTree from './PokemonsEvolutionTree';
+import getPokemonsByNames from '../redux/actions/getPokemonsByNames';
 
 
 class PokemonPage extends PureComponent {
@@ -14,42 +16,67 @@ class PokemonPage extends PureComponent {
     };
 
     state = {
-        movesList: [],
+        moves: [],
         evolutionChain: null,
     };
 
-    async componentDidMount() {
-        const {pokemons, match} = this.props;
+    componentDidMount() {
+        const pokemonName = this.props.match.params.pokemon;
 
-        const pokemonName = match.params.pokemon;
-        const pokemon = pokemons.get(pokemonName);
-        const movesList = pokemon.info.moves;
+        this.setPokemonMoves(pokemonName);
 
-        this.setState({movesList});
+        this.setPokemonEvolutionChain(pokemonName);
+    }
 
+    setPokemonMoves(pokemonName) {
+        const pokemon = this.props.pokemons.get(pokemonName);
+        const moves = pokemon.info.moves;
+
+        this.setState({moves});
+    }
+
+    async setPokemonEvolutionChain(pokemonName) {
         const pokemonSpecies = await pokeapi.getPokemonSpeciesByName(pokemonName);
         const chainUrl = pokemonSpecies.evolution_chain.url;
         const evolutionChain = await pokeapi.resource(chainUrl);
 
-        console.log(evolutionChain);
+        const chain = await this.addPokemonsInfoInEvolutionChain(evolutionChain.chain);
 
-        // TODO Add info to each pokemon is chan
+        evolutionChain.chain = chain;
+
+        console.log('chain with info = ', chain);
 
         this.setState({evolutionChain});
     }
 
+    addPokemonsInfoInEvolutionChain = async (chain) => {
+        const name = chain.species.name;
+
+        chain.info = await pokeapi.getPokemonByName(name);
+
+        const promises = chain.evolves_to.map((c) => this.addPokemonsInfoInEvolutionChain(c));
+        await Promise.all(promises);
+
+        return chain;
+    };
+
+
     render() {
+        const {evolutionChain} = this.state;
 
         return (
             <div>
-                <ul>
-                    {this.state.movesList.map(({move}) =>
-                        <li key={move.name}>{capitalizeFirstLetter(move.name)}</li>
-                    )}
-                </ul>
+                {
+                    evolutionChain && (
+                        <PokemonsEvolutionTree
+                            evolutionChain={evolutionChain}
+                        />)
+                }
+
+                {/*<MovesList moves={this.state.moves} />*/}
             </div>
         );
     }
 }
 
-export default withRouter(connect(({pokemons}) => ({pokemons}))(PokemonPage));
+export default withRouter(connect(({pokemons}) => ({pokemons}), {getPokemonsByNames})(PokemonPage));

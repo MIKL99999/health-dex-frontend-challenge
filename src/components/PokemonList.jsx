@@ -2,11 +2,12 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {OrderedMap} from 'immutable';
 import {MoonLoader} from 'react-spinners';
-import PokemonListItem from './PokemonListItem';
 import pokeapi from '../fetch/pokeapi';
-import {setPokemons} from '../redux/actions';
 import {Pagination} from './Pagination';
-import getPokemonsByUrls from '../redux/actions/getPokemonsByUrls';
+import PokemonListItem from './PokemonListItem';
+import {setUI} from '../redux/actions/uiActions';
+import {setPokemons} from '../redux/actions/pokemonsActions';
+import getPokemonsByNames from '../redux/actions/getPokemonsByNames';
 import '../styles/pokemon-list.scss';
 
 
@@ -14,6 +15,7 @@ class PokemonList extends Component {
     state = {
         offset: 0,
         pageCount: 0,
+        currentPage: 0,
         itemsOnPage: 12,
         pokemonsOnPage: OrderedMap(),
     };
@@ -43,40 +45,47 @@ class PokemonList extends Component {
     }
 
     async componentDidUpdate(prevProps, prevState) {
-        const {offset} = this.state;
-        const {pokemonsFilter} = this.props;
-
-        if (offset !== prevState.offset) {
+        if (this.state.offset !== prevState.offset) {
             await this.getPokemonsInfo(this.filterPokemons());
 
-            const newPokemonsOnPage = this.filterPokemons();
-
-            this.setState({pokemonsOnPage: newPokemonsOnPage});
+            this.setState({pokemonsOnPage: this.filterPokemons()});
         }
 
-        if (pokemonsFilter.currentType !== prevProps.pokemonsFilter.currentType) {
-            const newPokemonsOnPage = this.filterPokemons();
-
+        if (this.props.pokemonsFilter.currentType !== prevProps.pokemonsFilter.currentType) {
             this.setState({
                 offset: 0,
-                pokemonsOnPage: newPokemonsOnPage,
-                pageCount: this.getPageCount(pokemonsFilter.filteredPokemonNames.length),
-            })
+                currentPage: 0,
+                pokemonsOnPage: this.filterPokemons(),
+                pageCount: this.getPageCount(this.getCountOfFilteredPokemons()),
+            });
         }
     }
 
     async getPokemonsInfo(pokemons) {
-        const pokemonsUrls = pokemons.reduce((arr, pokemon) => {
-            arr.push(pokemon.url);
+        const pokemonNames = pokemons.reduce((arr, pokemon) => {
+            arr.push(pokemon.name);
             return arr;
         }, []);
 
-        await this.props.getPokemonsByUrls(pokemonsUrls);
+        const {setUI} = this.props;
+
+        setUI({isLoading: true});
+        await this.props.getPokemonsByNames(pokemonNames);
+        setUI({isLoading: false});
     };
 
+    getCountOfFilteredPokemons = () => {
+        const {pokemons, pokemonsFilter} = this.props;
+        const length = pokemonsFilter.filteredPokemonNames.length;
+        return length ? length : pokemons.size;
+    };
+
+    /**
+     * @param {number} selected
+     */
     handlePageClick = ({selected}) => {
         const offset = Math.ceil(selected * this.state.itemsOnPage);
-        this.setState({offset});
+        this.setState({offset, currentPage: selected});
     };
 
     filterPokemons() {
@@ -117,10 +126,12 @@ class PokemonList extends Component {
     render() {
         const {
             pageCount,
+            currentPage,
             pokemonsOnPage,
         } = this.state;
+        const {isLoading} = this.props;
 
-        if (!pokemonsOnPage.size) {
+        if (!pokemonsOnPage.size || isLoading) {
             return (
                 <div className="center">
                     <MoonLoader/>
@@ -140,6 +151,7 @@ class PokemonList extends Component {
                 </ul>
                 <Pagination
                     pageCount={pageCount}
+                    currentPage={currentPage}
                     onPageChange={this.handlePageClick}
                 />
             </div>
@@ -147,7 +159,8 @@ class PokemonList extends Component {
     }
 }
 
-export default connect(({pokemons, pokemonsFilter}) => ({pokemons, pokemonsFilter}), {
+export default connect(({pokemons, pokemonsFilter, ui}) => ({pokemons, pokemonsFilter, isLoading: ui.isLoading}), {
+    setUI,
     setPokemons,
-    getPokemonsByUrls,
+    getPokemonsByNames,
 })(PokemonList);

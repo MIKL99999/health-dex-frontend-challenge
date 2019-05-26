@@ -1,9 +1,9 @@
 import {OrderedMap} from 'immutable';
-import {SET_POKEMONS} from '../actions';
+import {SET_POKEMONS} from '../actions/pokemonsActions';
 
 const pokemons = (
     state = OrderedMap(),
-    action
+    action,
 ) => {
     switch (action.type) {
         case SET_POKEMONS:

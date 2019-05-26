@@ -1,4 +1,4 @@
-import {SET_POKEMONS_FILTER} from "../actions";
+import {SET_POKEMONS_FILTER} from '../actions/pokemonsFilterActions';
 
 const pokemonsFilter = (
     state = {currentType: null, filteredPokemonNames: []},

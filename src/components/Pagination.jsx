@@ -4,13 +4,14 @@ import ReactPaginate from 'react-paginate';
 import '../styles/pagination.scss';
 
 
-export const Pagination = ({pageCount, onPageChange, pageRangeDisplayed, marginPagesDisplayed}) => {
+export const Pagination = ({pageCount, currentPage, onPageChange, pageRangeDisplayed, marginPagesDisplayed}) => {
     return (
         <ReactPaginate
             previousLabel={'Previous'}
             nextLabel={'Next'}
             breakLabel={'...'}
             pageCount={pageCount}
+            initialPage={currentPage}
             pageRangeDisplayed={pageRangeDisplayed}
             marginPagesDisplayed={marginPagesDisplayed}
             onPageChange={onPageChange}
@@ -24,6 +25,7 @@ export const Pagination = ({pageCount, onPageChange, pageRangeDisplayed, marginP
 
 Pagination.propTypes = {
     pageCount: PropTypes.number.isRequired,
+    currentPage: PropTypes.number.isRequired,
     pageRangeDisplayed: PropTypes.number.isRequired,
     marginPagesDisplayed: PropTypes.number.isRequired,
 };
