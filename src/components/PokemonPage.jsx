@@ -1,6 +1,7 @@
 import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
+import {OrderedMap} from 'immutable';
 import {withRouter} from 'react-router';
 import {MoonLoader} from 'react-spinners';
 import pokeapi from '../fetch/pokeapi';
@@ -13,7 +14,9 @@ class PokemonPage extends PureComponent {
     static propTypes = {
         match: PropTypes.object.isRequired,
         location: PropTypes.object.isRequired,
-        history: PropTypes.object.isRequired
+        history: PropTypes.object.isRequired,
+        pokemons: PropTypes.instanceOf(OrderedMap).isRequired,
+        getPokemonsByNames: PropTypes.func.isRequired,
     };
 
     state = {
@@ -29,11 +32,17 @@ class PokemonPage extends PureComponent {
         this.setPokemonEvolutionChain(pokemonName);
     }
 
-    setPokemonMoves(pokemonName) {
+    /**
+     * @param {string} pokemonName
+     */
+    async setPokemonMoves(pokemonName) {
         const pokemon = this.props.pokemons.get(pokemonName);
-        const moves = pokemon.info.moves;
-
-        this.setState({moves});
+        if (pokemon) {
+            this.setState({moves: pokemon.info.moves});
+        } else {
+            const pokemon = await pokeapi.getPokemonByName(pokemonName);
+            this.setState({moves: pokemon.moves});
+        }
     }
 
     async setPokemonEvolutionChain(pokemonName) {

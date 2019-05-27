@@ -8,6 +8,9 @@ import '../styles/pokemons-evolution-tree.scss';
 
 
 class PokemonsEvolutionTree extends PureComponent {
+    static propTypes = {
+        evolutionChain: PropTypes.object.isRequired,
+    };
 
     id = 'pokemonsEvolutionTree' + uuid();
 

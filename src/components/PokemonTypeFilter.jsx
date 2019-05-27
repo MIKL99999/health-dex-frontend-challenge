@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import pokeapi from '../fetch/pokeapi';
 import getPokemonsByNames from '../redux/actions/getPokemonsByNames';
@@ -8,6 +9,12 @@ import '../styles/pokemon-type-filter.scss';
 
 
 class PokemonTypeFilter extends Component {
+    static propTypes = {
+        setUI: PropTypes.func.isRequired,
+        setPokemonsFilter: PropTypes.func.isRequired,
+        getPokemonsByNames: PropTypes.func.isRequired,
+    };
+
     state = {
         typesList: [],
     };
@@ -39,10 +46,7 @@ class PokemonTypeFilter extends Component {
             try {
                 const typeData = await pokeapi.getTypeByName(type);
 
-                const pokemonNames = typeData.pokemon.reduce((acc, pokemon) => {
-                    acc.push(pokemon.pokemon.name);
-                    return acc;
-                }, []);
+                const pokemonNames = typeData.pokemon.map(pokemon => pokemon.pokemon.name);
 
                 await getPokemonsByNames(pokemonNames);
                 setPokemonsFilter({currentType: type, filteredPokemonNames: pokemonNames});
@@ -61,7 +65,9 @@ class PokemonTypeFilter extends Component {
                 onChange={this.handleTypeChange}
             >
                 <option>{PokemonTypeFilter.defaultFilterValue}</option>
-                {this.state.typesList.map(({name}) => <option key={name}>{name}</option>)}
+                {this.state.typesList.map(({name}) =>
+                    <option key={name}>{name}</option>
+                )}
             </select>
         );
     }
