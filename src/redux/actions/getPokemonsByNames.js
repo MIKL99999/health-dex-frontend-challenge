@@ -15,6 +15,7 @@ const getPokemonsByNames = (pokemonNames) => async (dispatch, getState) => {
         const pokemonsWithInfo = pokemons.withMutations((pokemonsMut) => {
             pokemonsInfoList.forEach((pokemonsInfo) => {
                 pokemonsInfo.abilities.sort((a, b) => a.slot - b.slot);
+                pokemonsInfo.stats.reverse();
 
                 pokemonsMut.setIn([pokemonsInfo.name, 'info'], pokemonsInfo);
             })
