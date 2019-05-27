@@ -4,8 +4,15 @@
   border-bottom: 1px #cccccc solid;
   padding: 5px;
 
-  &__base-stat{
+  &__name {
+    color: gray;
+    font-weight: 500;
+    text-align: right;
+  }
+
+  &__base-stat {
     font-weight: bold;
+    text-align: center;
   }
 
   &__line {

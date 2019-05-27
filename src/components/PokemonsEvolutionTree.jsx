@@ -90,8 +90,6 @@ class PokemonsEvolutionTree extends PureComponent {
                 .style('fill', 'blue')
                 .text(d => capitalizeFirstLetter(d.data.species.name));
 
-
-            // TODO FIX !
             if (nodeEnter.size()) {
                 // Add pokemon types
                 nodeEnter.datum().data.info.types.forEach((type, index) => {
@@ -107,7 +105,7 @@ class PokemonsEvolutionTree extends PureComponent {
                 });
             }
 
-            // Add pokemon names
+            // Add pokemon evolution details
             nodeEnter.append('text')
                 .attr("dy", ".35em")
                 .attr("x", -125)

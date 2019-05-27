@@ -1,0 +1,14 @@
+.moves-list {
+  display: inline-block;
+
+  &__header {
+    font-size: 22px;
+    font-weight: bold;
+  }
+
+  &__list {
+    height: 30vh;
+    overflow: auto;
+    width: fit-content;
+  }
+}

@@ -15,5 +15,9 @@
     justify-content: space-between;
     border-bottom: 1px #cccccc solid;
     padding: 5px 0;
+
+    &-data {
+      font-weight: 600;
+    }
   }
 }

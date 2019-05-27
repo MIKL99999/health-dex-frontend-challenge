@@ -10,7 +10,7 @@ const PokemonStats = ({stats}) => {
             <span className="pokemon-stats__text">Base stats</span>
 
             <div>
-                {stats.reverse().map(({stat, base_stat}) => (
+                {stats.map(({stat, base_stat}) => (
                     <PokemonStatsRow
                         key={stat.name}
                         stat={stat}

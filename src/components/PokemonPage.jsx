@@ -69,7 +69,7 @@ class PokemonPage extends PureComponent {
                         />)
                 }
 
-                {/*<MovesList moves={this.state.moves} />*/}
+                <MovesList moves={this.state.moves}/>
             </div>
         );
     }

@@ -31,7 +31,7 @@ const calcFillerPercent = (base_stat) => base_stat * 100 / 255;
 const PokemonStatsRow = ({base_stat, stat}) => {
     return (
         <div key={stat.name} className="pokemon-stats-row">
-            <span>{capitalizeFirstLetter(stat.name)}</span>
+            <span className="pokemon-stats-row__name">{capitalizeFirstLetter(stat.name)}</span>
             <span className="pokemon-stats-row__base-stat">{base_stat}</span>
 
             <div className="pokemon-stats-row__line">

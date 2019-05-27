@@ -26,7 +26,7 @@ const PokemonInfo = ({pokemon}) => {
 
             <div className="pokemon-info__item">
                 <span>National №</span>
-                <span>{id}</span>
+                <span className="pokemon-info__item-data">{id}</span>
             </div>
 
             <div className="pokemon-info__item">
@@ -36,12 +36,14 @@ const PokemonInfo = ({pokemon}) => {
 
             <div className="pokemon-info__item">
                 <span>Height</span>
-                <span>{height / 10} m</span>
+                <span className="pokemon-info__item-data">{height / 10} m</span>
             </div>
 
             <div className="pokemon-info__item">
                 <span>Weight</span>
-                <span>{convertKgToLbs(weightInKg).toFixed(1)} lbs ({weightInKg} kg)</span>
+                <span className="pokemon-info__item-data">
+                    {convertKgToLbs(weightInKg).toFixed(1)} lbs ({weightInKg} kg)
+                </span>
             </div>
 
 
@@ -51,7 +53,7 @@ const PokemonInfo = ({pokemon}) => {
                 <div>
                     {abilities.map(({ability, is_hidden}) =>
                         <div key={ability.name}>
-                            <span>{ability.name}</span>
+                            <span className="pokemon-info__item-data">{capitalizeFirstLetter(ability.name)}</span>
                             {is_hidden ? <span> (hidden)</span> : null}
                         </div>)}
                 </div>
