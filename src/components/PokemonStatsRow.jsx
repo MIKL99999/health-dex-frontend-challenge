@@ -13,6 +13,8 @@ const getFillerColor = (base_stat) => {
         return 'red';
     } else if (base_stat <= 75) {
         return 'orange';
+    } else if (base_stat <= 150) {
+        return 'yellowGreen';
     } else {
         return 'green';
     }
