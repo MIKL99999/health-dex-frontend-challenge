@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
+import classnames from 'classnames';
 import pokeapi from '../fetch/pokeapi';
 import getPokemonsByNames from '../redux/actions/getPokemonsByNames';
 import {setPokemonsFilter} from '../redux/actions/pokemonsFilterActions';
@@ -11,6 +12,7 @@ import '../styles/pokemon-type-filter.scss';
 class PokemonTypeFilter extends Component {
     static propTypes = {
         setUI: PropTypes.func.isRequired,
+        isLoading: PropTypes.bool.isRequired,
         setPokemonsFilter: PropTypes.func.isRequired,
         getPokemonsByNames: PropTypes.func.isRequired,
     };
@@ -61,7 +63,9 @@ class PokemonTypeFilter extends Component {
     render() {
         return (
             <select
-                className="pokemon-type-filter"
+                className={classnames('pokemon-type-filter', {
+                    'pokemon-type-filter_hidden': this.props.isLoading,
+                })}
                 onChange={this.handleTypeChange}
             >
                 <option>{PokemonTypeFilter.defaultFilterValue}</option>
@@ -73,4 +77,7 @@ class PokemonTypeFilter extends Component {
     }
 }
 
-export default connect(null, {getPokemonsByNames, setPokemonsFilter, setUI})(PokemonTypeFilter);
+export default connect(
+    ({ui}) => ({isLoading: ui.isLoading}),
+    {getPokemonsByNames, setPokemonsFilter, setUI},
+)(PokemonTypeFilter);

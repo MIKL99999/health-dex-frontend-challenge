@@ -1,3 +1,7 @@
 .pokemon-type-filter {
   margin: 10px;
+
+  &_hidden {
+    visibility: hidden;
+  }
 }
