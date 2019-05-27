@@ -36,24 +36,32 @@ class PokemonPage extends PureComponent {
     }
 
     async setPokemonEvolutionChain(pokemonName) {
-        const pokemonSpecies = await pokeapi.getPokemonSpeciesByName(pokemonName);
+        try {
+            const pokemonSpecies = await pokeapi.getPokemonSpeciesByName(pokemonName);
 
-        const evolutionChain = await pokeapi.resource(pokemonSpecies.evolution_chain.url);
+            const evolutionChain = await pokeapi.resource(pokemonSpecies.evolution_chain.url);
 
-        evolutionChain.chain = await this.addPokemonsInfoInEvolutionChain(evolutionChain.chain);
+            evolutionChain.chain = await this.addPokemonsInfoInEvolutionChain(evolutionChain.chain);
 
-        this.setState({evolutionChain});
+            this.setState({evolutionChain});
+        } catch (e) {
+            console.error(e);
+        }
     }
 
     addPokemonsInfoInEvolutionChain = async (chain) => {
-        const name = chain.species.name;
+        try {
+            const name = chain.species.name;
 
-        chain.info = await pokeapi.getPokemonByName(name);
+            chain.info = await pokeapi.getPokemonByName(name);
 
-        const promises = chain.evolves_to.map((c) => this.addPokemonsInfoInEvolutionChain(c));
-        await Promise.all(promises);
+            const promises = chain.evolves_to.map((c) => this.addPokemonsInfoInEvolutionChain(c));
+            await Promise.all(promises);
 
-        return chain;
+            return chain;
+        } catch (e) {
+            console.error(e);
+        }
     };
 
 

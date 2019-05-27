@@ -21,34 +21,42 @@ class PokemonList extends Component {
     };
 
     async componentDidMount() {
-        const pokemonsList = await pokeapi.getPokemonsList();
+        try {
+            const pokemonsList = await pokeapi.getPokemonsList();
 
-        const {offset, itemsOnPage} = this.state;
+            const {offset, itemsOnPage} = this.state;
 
-        this.setState({pageCount: this.getPageCount(pokemonsList.count)});
+            this.setState({pageCount: this.getPageCount(pokemonsList.count)});
 
-        const {pokemons, setPokemons} = this.props;
+            const {pokemons, setPokemons} = this.props;
 
-        const fetchedPokemons = pokemons.withMutations((pokemonsMut) => {
-            pokemonsList.results.forEach((pokemon) => {
-                pokemon.info = null;
-                pokemonsMut.set(pokemon.name, pokemon);
+            const fetchedPokemons = pokemons.withMutations((pokemonsMut) => {
+                pokemonsList.results.forEach((pokemon) => {
+                    pokemon.info = null;
+                    pokemonsMut.set(pokemon.name, pokemon);
+                });
             });
-        });
 
-        setPokemons(fetchedPokemons);
+            setPokemons(fetchedPokemons);
 
-        await this.getPokemonsInfo(fetchedPokemons.slice(offset, offset + itemsOnPage));
+            await this.getPokemonsInfo(fetchedPokemons.slice(offset, offset + itemsOnPage));
 
-        const pokemonsOnPage = this.filterPokemons();
-        this.setState({pokemonsOnPage});
+            const pokemonsOnPage = this.filterPokemons();
+            this.setState({pokemonsOnPage});
+        } catch (e) {
+            console.error(e);
+        }
     }
 
     async componentDidUpdate(prevProps, prevState) {
         if (this.state.offset !== prevState.offset) {
-            await this.getPokemonsInfo(this.filterPokemons());
+            try {
+                await this.getPokemonsInfo(this.filterPokemons());
 
-            this.setState({pokemonsOnPage: this.filterPokemons()});
+                this.setState({pokemonsOnPage: this.filterPokemons()});
+            } catch (e) {
+                console.error(e);
+            }
         }
 
         if (this.props.pokemonsFilter.currentType !== prevProps.pokemonsFilter.currentType) {
@@ -70,7 +78,13 @@ class PokemonList extends Component {
         const {setUI} = this.props;
 
         setUI({isLoading: true});
-        await this.props.getPokemonsByNames(pokemonNames);
+
+        try {
+            await this.props.getPokemonsByNames(pokemonNames);
+        } catch (e) {
+            console.error(e);
+        }
+
         setUI({isLoading: false});
     };
 

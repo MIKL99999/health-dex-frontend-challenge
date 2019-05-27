@@ -15,8 +15,12 @@ class PokemonTypeFilter extends Component {
     static defaultFilterValue = 'Choose pokemon type';
 
     async componentDidMount() {
-        const res = await pokeapi.getTypesList();
-        this.setState({typesList: res.results});
+        try {
+            const res = await pokeapi.getTypesList();
+            this.setState({typesList: res.results});
+        } catch (e) {
+            console.error(e);
+        }
     }
 
     /**
@@ -32,16 +36,19 @@ class PokemonTypeFilter extends Component {
         if (type === PokemonTypeFilter.defaultFilterValue) {
             setPokemonsFilter({currentType: null, filteredPokemonNames: []});
         } else {
-            const typeData = await pokeapi.getTypeByName(type);
+            try {
+                const typeData = await pokeapi.getTypeByName(type);
 
-            const pokemonNames = typeData.pokemon.reduce((acc, pokemon) => {
-                acc.push(pokemon.pokemon.name);
-                return acc;
-            }, []);
+                const pokemonNames = typeData.pokemon.reduce((acc, pokemon) => {
+                    acc.push(pokemon.pokemon.name);
+                    return acc;
+                }, []);
 
-            await getPokemonsByNames(pokemonNames);
-            setPokemonsFilter({currentType: type, filteredPokemonNames: pokemonNames});
-
+                await getPokemonsByNames(pokemonNames);
+                setPokemonsFilter({currentType: type, filteredPokemonNames: pokemonNames});
+            } catch (e) {
+                console.error(e);
+            }
         }
 
         setUI({isLoading: false});
