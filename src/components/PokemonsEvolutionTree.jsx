@@ -153,20 +153,16 @@ class PokemonsEvolutionTree extends PureComponent {
         }
 
         function addPokemonTypes(nodeEnter) {
-            if (nodeEnter.size()) {
-                // Add pokemon types
-                nodeEnter.datum().data.info.types.forEach((type, index) => {
-                    const typeName = type.type.name;
-
-                    nodeEnter
-                        .append('text')
-                        .attr("dy", ".35em")
-                        .attr("x", -20)
-                        .attr("y", 100 + (25 * index))
-                        .style('fill', () => getTypeColor(typeName))
-                        .text(() => capitalizeFirstLetter(typeName));
-                });
-            }
+            nodeEnter
+                .selectAll('text')
+                .data(d => d.data.info.types, d => d.id)
+                .enter()
+                .append('text')
+                .attr("dy", ".35em")
+                .attr("x", -25)
+                .attr("y", (_, index) => 100 + (25 * index))
+                .style('fill', (d) => getTypeColor(d.type.name))
+                .text(d => capitalizeFirstLetter(d.type.name));
         }
 
         function addPokemonEvolutionDetails(nodeEnter) {
