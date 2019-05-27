@@ -7,18 +7,19 @@ import '../styles/pagination.scss';
 export const Pagination = ({pageCount, currentPage, onPageChange, pageRangeDisplayed, marginPagesDisplayed}) => {
     return (
         <ReactPaginate
-            previousLabel={'Previous'}
-            nextLabel={'Next'}
-            breakLabel={'...'}
+            previousLabel="Previous"
+            nextLabel="Next"
+            breakLabel="..."
             pageCount={pageCount}
             initialPage={currentPage}
+            onPageChange={onPageChange}
+            containerClassName="pagination"
+            pageClassName="pagination__item"
+            nextClassName="pagination__item"
+            previousClassName="pagination__item"
+            activeClassName="pagination__active"
             pageRangeDisplayed={pageRangeDisplayed}
             marginPagesDisplayed={marginPagesDisplayed}
-            onPageChange={onPageChange}
-            containerClassName={'pagination'}
-            subContainerClassName={'pages pagination'}
-            activeClassName="pagination__active"
-            breakClassName={'break-me'}
         />
     );
 };
