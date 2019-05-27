@@ -19,7 +19,7 @@ class PokemonList extends Component {
         setPokemons: PropTypes.func.isRequired,
         getPokemonsByNames: PropTypes.func.isRequired,
         pokemons: PropTypes.instanceOf(OrderedMap).isRequired,
-        pokemonsFilter: PropTypes.array.isRequired,
+        pokemonsFilter: PropTypes.object.isRequired,
     };
 
     state = {
