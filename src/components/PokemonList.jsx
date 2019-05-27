@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {OrderedMap} from 'immutable';
 import {MoonLoader} from 'react-spinners';
@@ -12,6 +13,15 @@ import '../styles/pokemon-list.scss';
 
 
 class PokemonList extends Component {
+    static propTypes = {
+        setUI: PropTypes.func.isRequired,
+        isLoading: PropTypes.bool.isRequired,
+        setPokemons: PropTypes.func.isRequired,
+        getPokemonsByNames: PropTypes.func.isRequired,
+        pokemons: PropTypes.instanceOf(OrderedMap).isRequired,
+        pokemonsFilter: PropTypes.array.isRequired,
+    };
+
     state = {
         offset: 0,
         pageCount: 0,
@@ -173,8 +183,15 @@ class PokemonList extends Component {
     }
 }
 
-export default connect(({pokemons, pokemonsFilter, ui}) => ({pokemons, pokemonsFilter, isLoading: ui.isLoading}), {
-    setUI,
-    setPokemons,
-    getPokemonsByNames,
-})(PokemonList);
+export default connect(
+    ({pokemons, pokemonsFilter, ui}) => ({
+        pokemons,
+        pokemonsFilter,
+        isLoading: ui.isLoading,
+    }),
+    {
+        setUI,
+        setPokemons,
+        getPokemonsByNames,
+    }
+)(PokemonList);
