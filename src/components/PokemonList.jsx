@@ -134,7 +134,7 @@ class PokemonList extends Component {
      * @returns {number}
      */
     getPageCount(itemsCount) {
-        return Math.ceil(itemsCount / this.state.itemsOnPage)
+        return Math.ceil(itemsCount / this.state.itemsOnPage);
     }
 
     /**
