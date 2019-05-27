@@ -66,3 +66,121 @@ This section has moved here: https://facebook.github.io/create-react-app/docs/de
 ### `npm run build` fails to minify
 
 This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+
+##Deployment
+
+This Project was deployment by [@aws-amplify/cli](https://aws-amplify.github.io/docs/js/react).
+ 
+##Code walk-through
+ 
+### Libs
+
+#### [Redux](https://redux.js.org/)
+
+For managing application state.
+
+#### [redux-thunk](https://github.com/reduxjs/redux-thunk)
+
+With a plain basic Redux store, you can only do simple synchronous updates by dispatching an action. Middleware extend the store's abilities, and let you write async logic that interacts with the store.
+
+#### [react-router](https://github.com/reactjs/react-router-redux)
+
+For application routing.
+ 
+#### [pokeapi-js-wrapper](https://github.com/PokeAPI/pokeapi-js-wrapper)
+ 
+A PokeAPI wrapper intended for browsers only. Comes fully asynchronous (with localForage) and built-in cache.
+ 
+#### [D3.js](https://d3js.org/)
+
+D3.js was used to create pokemons evolution tree.
+
+#### [prop-types](https://github.com/facebook/prop-types)
+
+Runtime type checking for React props.
+
+#### [classnames](https://github.com/JedWatson/classnames)
+
+A simple JavaScript utility for conditionally joining classNames together.
+
+#### [immutable](https://github.com/immutable-js/immutable-js)
+
+Immutable data cannot be changed once created, leading to much simpler application development, no defensive copying, and enabling advanced memoization and change detection techniques with simple logic.
+
+#### [uuid](https://github.com/kelektiv/node-uuid)
+
+Simple, fast generation of RFC4122 UUIDS.
+
+#### [normalize.css](https://github.com/necolas/normalize.css)
+
+Normalizes styles.
+
+#### [node-sass](https://github.com/sass/node-sass)
+
+Used to build SCSS files.
+
+#### [react-spinners](https://github.com/davidhu2000/react-spinners)
+
+A collection of loading spinners.
+
+#### [react-paginate](https://github.com/AdeleD/react-paginate)
+
+A ReactJS component to render a pagination.
+
+
+### Project structure
+
+#### index.js - application entry point
+
+#### components
+
+Contains next React components:
+
+    MainPage - render PokemonTypeFilter and PokemonList.
+    MovesList - render list of pokemon moves.
+    Pagination - wrapper on ReactPaginate component.
+    PokemonIcon - render pokemon icon.
+    PokemonInfo - render pokemon info.
+    PokemonList - render list of pokemons.
+    PokemonListItem - render item of pokemons list.
+    PokemonPage - render pokemon page.
+    PokemonsEvolutionTree - render pokemons evolution tree.  
+    PokemonStats - render stats of specific pokemon.
+    PokemonStatsRow - render specific pokemon state.
+    PokemonType - render pokemon type.
+    PokemonTypeFilter - render pokemon type filter.  
+    PokemonTypesGroup - render group of PokemonTypes. 
+    
+
+#### fetch
+
+Contains pokeapi-js-wrapper set up.
+
+#### redux
+
+##### actions
+
+    pokemonsActions
+    pokemonsFilterActions
+    uiActions
+    getPokemonsByNames
+
+##### reducers
+
+    pokemons - store pokemons.
+    pokemonsFilter - store pokemons filter dat. 
+    ui - store ui info.
+    index - combine above described reducers and routerReducer.
+
+##### config
+
+Redux config file. Create store with reducers and apply middleware.
+
+#### styles
+
+Contains SCSS styles.
+
+#### utils
+
+Contains common utils.
+
