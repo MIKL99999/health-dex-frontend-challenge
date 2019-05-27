@@ -1,12 +1,13 @@
-import React, {Fragment} from 'react';
+import React from 'react';
 import PokemonTypeFilter from './PokemonTypeFilter';
 import PokemonList from './PokemonList';
+import '../styles/main-page.scss';
 
 export default function MainPage() {
     return (
-        <Fragment>
+        <div className="main-page">
             <PokemonTypeFilter/>
             <PokemonList/>
-        </Fragment>
+        </div>
     )
 }
