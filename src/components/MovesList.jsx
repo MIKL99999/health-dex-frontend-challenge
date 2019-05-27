@@ -10,7 +10,12 @@ function MovesList({moves}) {
             <span className="moves-list__header">Moves List</span>
             <ul className="moves-list__list">
                 {moves.map(({move}) =>
-                    <li key={move.name}>{capitalizeFirstLetter(move.name)}</li>
+                    <li
+                        key={move.name}
+                        className="moves-list__item"
+                    >
+                        {capitalizeFirstLetter(move.name)}
+                    </li>
                 )}
             </ul>
         </div>

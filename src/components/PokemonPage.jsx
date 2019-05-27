@@ -8,6 +8,7 @@ import pokeapi from '../fetch/pokeapi';
 import MovesList from './MovesList';
 import PokemonsEvolutionTree from './PokemonsEvolutionTree';
 import getPokemonsByNames from '../redux/actions/getPokemonsByNames';
+import '../styles/pokemon-page.scss';
 
 
 class PokemonPage extends PureComponent {
@@ -76,23 +77,31 @@ class PokemonPage extends PureComponent {
 
 
     render() {
-        const {evolutionChain} = this.state;
+        const {evolutionChain, moves} = this.state;
 
         return (
-            <div>
-                {
-                    evolutionChain ?
-                        (
-                            <PokemonsEvolutionTree
-                                evolutionChain={evolutionChain}
-                            />)
-                        :
-                        (
-                            <MoonLoader/>
-                        )
-                }
+            <div className="pokemon-page">
+                <button
+                    className="pokemon-page__home-button"
+                    onClick={() => this.props.history.push('')}
+                >
+                    Home
+                </button>
+                <div className="pokemon-page__container">
+                    {
+                        evolutionChain ?
+                            (
+                                <PokemonsEvolutionTree
+                                    evolutionChain={evolutionChain}
+                                />)
+                            :
+                            (
+                                <MoonLoader/>
+                            )
+                    }
 
-                <MovesList moves={this.state.moves}/>
+                    <MovesList moves={moves}/>
+                </div>
             </div>
         );
     }
