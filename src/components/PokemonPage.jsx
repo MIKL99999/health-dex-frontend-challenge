@@ -2,6 +2,7 @@ import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {withRouter} from 'react-router';
+import {MoonLoader} from 'react-spinners';
 import pokeapi from '../fetch/pokeapi';
 import MovesList from './MovesList';
 import PokemonsEvolutionTree from './PokemonsEvolutionTree';
@@ -71,10 +72,15 @@ class PokemonPage extends PureComponent {
         return (
             <div>
                 {
-                    evolutionChain && (
-                        <PokemonsEvolutionTree
-                            evolutionChain={evolutionChain}
-                        />)
+                    evolutionChain ?
+                        (
+                            <PokemonsEvolutionTree
+                                evolutionChain={evolutionChain}
+                            />)
+                        :
+                        (
+                            <MoonLoader/>
+                        )
                 }
 
                 <MovesList moves={this.state.moves}/>
